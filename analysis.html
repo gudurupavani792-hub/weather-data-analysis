@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Prediction Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; text-align: center; padding: 50px; }
+        input, button { padding: 10px; margin: 5px; font-size: 16px; }
+        .result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Weather Prediction Dashboard</h1>
+
+    <input type="number" id="temp" placeholder="Temperature (°C)">
+    <input type="number" id="hum" placeholder="Humidity (%)">
+    <input type="number" id="rain" placeholder="Rainfall (mm)">
+    <input type="number" id="pres" placeholder="Pressure (hPa)">
+    <br>
+    <button onclick="predictWeather()">Predict Temperature</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        async function predictWeather() {
+            const temp = document.getElementById('temp').value;
+            const hum = document.getElementById('hum').value;
+            const rain = document.getElementById('rain').value;
+            const pres = document.getElementById('pres').value;
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({Temperature: temp, Humidity: hum, Rainfall: rain, Pressure: pres})
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = 
+                'Predicted Temperature: ' + data.Predicted_Temperature.toFixed(2) + ' °C';
+        }
+    </script>
+</body>
+</html>
